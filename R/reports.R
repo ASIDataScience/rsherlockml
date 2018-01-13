@@ -13,7 +13,7 @@ NULL
 #' @export
 report <- function(..., quiet=TRUE, mathjax=NULL) {
 
-  format <- rmarkdown::html_notebook(..., quiet=quiet, mathjax=mathjax)
+  format <- rmarkdown::html_document(..., quiet=quiet, mathjax=mathjax)
 
   pre_post_processor <- format$post_processor
 
@@ -32,6 +32,8 @@ report <- function(..., quiet=TRUE, mathjax=NULL) {
       replace(.=='</head>', '') %>%
       replace(.=='<head>', '<body>') %>%
       replace(stringr::str_detect(., '<h1 class="title'), '') %>%
+      replace(stringr::str_detect(., '<div class="btn-group pull-right">'),
+              '<div class="btn-group pull-right" style="display: none;">')
       writeLines(output_file)
 
     publish_report(params$title, output_file)
