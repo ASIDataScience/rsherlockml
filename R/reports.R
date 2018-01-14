@@ -81,7 +81,7 @@ get_report_list <- function() {
 publish_report <- function(report_name, report_path) {
   # check if report exists in this project
   print(report_name)
-  if (report_name %in% get_report_list()$report_name) {
+  if (report_name %in% suppressWarnings(get_report_list()$report_name)) {
     message(paste('\nPublishing a new version of existing report named', report_name))
     publish_new_version(report_name, report_path)
   } else {
