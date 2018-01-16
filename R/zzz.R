@@ -9,7 +9,7 @@ NULL
     sherlock.hudson_url = "https://hudson.platform.asidata.science",
     sherlock.secret_url = "https://secret-service.platform.asidata.science",
     sherlock.tavern_url = "https://tavern.platform.asidata.science",
-    sherlock.project_id = Sys.getenv("SHERLOCK_PROJECT_ID"),
+    sherlock.project_id = Sys.getenv("SHERLOCKML_PROJECT_ID"),
     sherlock.client_id = Sys.getenv("SHERLOCKML_CLIENT_ID"),
     sherlock.client_secret = Sys.getenv("SHERLOCKML_CLIENT_SECRET")
   )
