@@ -37,7 +37,7 @@ report <- function(..., quiet=TRUE, mathjax=NULL) {
               '<div class="btn-group pull-right" style="display: none;">')
       writeLines(output_file)
 
-    publish_report(params$title, output_file)
+    publish_report(params$title, output_file, params$description)
 
     # make sure HTML file is deleted at the of all operations
     do.call(on.exit, list(substitute(file.remove(output_file)), add = TRUE),
@@ -80,14 +80,15 @@ get_report_list <- function() {
 
 
 # TODO: Make sure the interim files are hidden with leading dot
-publish_report <- function(report_name, report_path) {
+publish_report <- function(report_name, report_path, description) {
   # check if report exists in this project
+
   if (report_name %in% suppressWarnings(get_report_list()$report_name)) {
     message(paste('\nPublishing a new version of existing report named', report_name))
     publish_new_version(report_name, report_path)
   } else {
     message(paste('\nPublishing a new report named', report_name))
-    publish_new_report(report_name, report_path)
+    publish_new_report(report_name, report_path, description)
   }
 }
 
@@ -99,7 +100,7 @@ make_tmp_notebook <- function() {
 }
 
 
-publish_new_report <- function(report_name, report_path) {
+publish_new_report <- function(report_name, report_path, description) {
 
   # copy the empty notebook into the current folder (project scope)
   tmp_notebook <- make_tmp_notebook()
@@ -108,7 +109,7 @@ publish_new_report <- function(report_name, report_path) {
   paste0(getOption('sherlock.tavern_url'), '/project/', getOption('sherlock.project_id')) %>%
     httr::POST(body = list(report_name = report_name,
                      notebook_path = substring(tmp_notebook, 10),
-                     description = 'This is a description',
+                     description = description,
                      author_id = getOption('sherlock.user_id')),
          add_hudson_header(),
          encode = 'json') %T>%
