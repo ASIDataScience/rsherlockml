@@ -24,6 +24,7 @@ report <- function(..., quiet=TRUE, mathjax=NULL) {
       magrittr::extract(1) %>%
       paste0('.Rmd') %>%
       rmarkdown::yaml_front_matter()
+
     output_file <- pre_post_processor(metadata, input_file, output_file, clean, verbose)
 
     # edit the HTML to make sure it's all encapsulated in the body tag
@@ -78,9 +79,9 @@ get_report_list <- function() {
 }
 
 
+# TODO: Make sure the interim files are hidden with leading dot
 publish_report <- function(report_name, report_path) {
   # check if report exists in this project
-  print(report_name)
   if (report_name %in% suppressWarnings(get_report_list()$report_name)) {
     message(paste('\nPublishing a new version of existing report named', report_name))
     publish_new_version(report_name, report_path)
@@ -92,7 +93,7 @@ publish_report <- function(report_name, report_path) {
 
 
 make_tmp_notebook <- function() {
-  tmp_notebook <- paste0(tempfile('temp_notebook_', tmpdir = getwd()), '.ipynb')
+  tmp_notebook <- paste0(tempfile('.temp_notebook_', tmpdir = getwd()), '.ipynb')
   file.copy(from = placeholder_notebook, to = tmp_notebook)
   return(tmp_notebook)
 }
