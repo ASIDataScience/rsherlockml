@@ -1,4 +1,4 @@
-# rsherlock
+# rsherlockml
 
 This package could have a bunch of sherlock utilities in it. Right now, it has the report `Rmd` template and output format.
 
