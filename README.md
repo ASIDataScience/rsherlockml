@@ -8,7 +8,7 @@ Create a new R-markdown report by going to:
 
 New file -> R Markdown -> from Template -> SherlockML report
 
-Or simply put `output: rsherlock::report` in the yaml front matter of your Rmd file.
+Or simply put `output: rsherlockml::report` in the yaml front matter of your Rmd file.
 
 ### Command line usage
 
