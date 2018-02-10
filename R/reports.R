@@ -2,11 +2,11 @@
 #' @importFrom magrittr %>% %$% %T>% %<>%
 NULL
 
-#' Rmarkdown format for a SherlockML report
+#' Rmarkdown format for a sherlockML report
 #'
-#' Knits a file to HTML and makes that HTML available as a Sherlock report
+#' Knits a file to HTML and makes that HTML available as a sherlockml report
 #'
-#' Simply add \code{output: rsherlock::report} to your Rmd yaml.
+#' Simply add \code{output: rsherlockml::report} to your Rmd yaml.
 #'
 #' @param ... all parameters that can be passed to \code{rmarkdown::html_document}
 #'
@@ -50,10 +50,10 @@ report <- function(..., quiet=TRUE, mathjax=NULL) {
 }
 
 
-if (!requireNamespace('rsherlock', quietly = T)) {
+if (!requireNamespace('rsherlockml', quietly = T)) {
   placeholder_notebook <- paste0(getwd(), '/empty.ipynb')
 } else {
-  placeholder_notebook <- system.file("extdata", "empty.ipynb", package="rsherlock")
+  placeholder_notebook <- system.file("extdata", "empty.ipynb", package="rsherlockml")
 }
 
 
@@ -70,17 +70,25 @@ extract_report_info <- function(report_object) {
 
 # get a list of report IDs
 get_report_list <- function() {
-  paste0(getOption('sherlock.tavern_url'), '/project/', getOption('sherlock.project_id')) %>%
+
+  set_hudson_token()
+  set_user_id()
+  paste0(getOption('sherlockml.tavern_url'), '/project/', Sys.getenv("SHERLOCKML_PROJECT_ID")) %>%
     httr::GET(add_hudson_header()) %T>%
     httr::stop_for_status() %>%
     httr::content(as='parsed', type='application/json') %>%
     purrr::map_df(extract_report_info) %>%
     return()
+
 }
 
 
-# TODO: Make sure the interim files are hidden with leading dot
 publish_report <- function(report_name, report_path, description) {
+
+  # set some required options
+  set_hudson_token()
+  set_user_id()
+
   # check if report exists in this project
 
   if (report_name %in% suppressWarnings(get_report_list()$report_name)) {
@@ -94,7 +102,7 @@ publish_report <- function(report_name, report_path, description) {
 
 
 make_tmp_notebook <- function() {
-  tmp_notebook <- paste0(tempfile('.temp_notebook_', tmpdir = getwd()), '.ipynb')
+  tmp_notebook <- paste0(tempfile('.temp_notebook_', tmpdir = '/project'), '.ipynb')
   file.copy(from = placeholder_notebook, to = tmp_notebook)
   return(tmp_notebook)
 }
@@ -106,11 +114,16 @@ publish_new_report <- function(report_name, report_path, description) {
   tmp_notebook <- make_tmp_notebook()
   on.exit(suppressWarnings(file.remove(tmp_notebook)))
 
-  paste0(getOption('sherlock.tavern_url'), '/project/', getOption('sherlock.project_id')) %>%
+  body = list(report_name = report_name,
+              notebook_path = gsub("/project/", "", tmp_notebook),
+              description = description,
+              author_id = getOption('sherlockml.user_id'))
+
+  paste0(getOption('sherlockml.tavern_url'), '/project/', Sys.getenv("SHERLOCKML_PROJECT_ID")) %>%
     httr::POST(body = list(report_name = report_name,
-                     notebook_path = substring(tmp_notebook, 10),
-                     description = description,
-                     author_id = getOption('sherlock.user_id')),
+                           notebook_path = gsub("/project/", "", tmp_notebook),
+                           description = description,
+                           author_id = getOption('sherlockml.user_id')),
          add_hudson_header(),
          encode = 'json') %T>%
     httr::stop_for_status() %>%
@@ -132,9 +145,9 @@ publish_new_version <- function(name, report_path) {
   tmp_notebook <- make_tmp_notebook()
   on.exit(suppressWarnings(file.remove(tmp_notebook)))
 
-  paste(getOption('sherlock.tavern_url'), "report", report_id, "version", sep="/") %>%
+  paste(getOption('sherlockml.tavern_url'), "report", report_id, "version", sep="/") %>%
     httr::POST(body = list(notebook_path = substring(tmp_notebook, 10),
-                           author_id = getOption('sherlock.user_id'),
+                           author_id = getOption('sherlockml.user_id'),
                            draft = F),
                add_hudson_header(),
                encode = 'json') %T>%
@@ -154,12 +167,13 @@ publish_new_version <- function(name, report_path) {
 
 wait_and_check <- function(report_object) {
 
-  file_key <- paste0(getOption("sherlock.project_id"), report_object$active_version$report_path)
+  file_key <- report_object$active_version$report_key
   sfs_credentials <- get_sfs_credentials()
 
   repeat {
     Sys.sleep(4)
-    if (aws.s3::head_object(object = file_key, bucket = "sml-projects-prod",
+    if (aws.s3::head_object(object = report_object$active_version$report_key,
+                            bucket = report_object$active_version$report_bucket,
                             key = sfs_credentials$access_key,
                             secret = sfs_credentials$secret_key,
                             region = 'eu-west-1', check_region = F)[1]
@@ -177,7 +191,7 @@ wait_and_check <- function(report_object) {
 
 update_report_text <- function(report_path, report_object) {
   sfs_credentials <- get_sfs_credentials()
-  file_key <- paste0(getOption("sherlock.project_id"), report_object$active_version$report_path)
+  file_key <- paste0(Sys.getenv("SHERLOCKML_PROJECT_ID"), report_object$active_version$report_path)
 
   # upload to s3
   aws.s3::put_object(report_path, object = file_key, bucket = "sml-projects-prod",
