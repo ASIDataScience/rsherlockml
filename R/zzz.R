@@ -7,8 +7,8 @@ NULL
   domain <- Sys.getenv('SHERLOCKML_DOMAIN')
   options(list(
     sherlockml.hudson_url = paste0(protocol, '://hudson.', domain),
-    sherlockml.secret_url = paste0(protocol, '://secret-service', domain),
-    sherlockml.tavern_url = paste0(protocol, '://tavern', domain)
+    sherlockml.secret_url = paste0(protocol, '://secret-service.', domain),
+    sherlockml.tavern_url = paste0(protocol, '://tavern.', domain)
   ))
 
   invisible()

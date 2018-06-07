@@ -194,7 +194,7 @@ update_report_text <- function(report_path, report_object) {
   file_key <- paste0(Sys.getenv("SHERLOCKML_PROJECT_ID"), report_object$active_version$report_path)
 
   # upload to s3
-  aws.s3::put_object(report_path, object = file_key, bucket = "sml-projects-prod",
+  aws.s3::put_object(report_path, object = file_key, bucket = sfs_credentials$bucket,
                      # credentials
                      key = sfs_credentials$access_key,
                      secret = sfs_credentials$secret_key,
