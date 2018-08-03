@@ -4,15 +4,13 @@
 \alias{report}
 \title{Rmarkdown format for a SherlockML report}
 \usage{
-report(..., quiet = TRUE, theme = NULL, mathjax = NULL,
-  highlight = NULL)
-}
-\arguments{
-\item{...}{all parameters that can be passed to \code{rmarkdown::html_document}}
+report(...)
 }
 \description{
-Knits a file to HTML and makes that HTML available as a Sherlock report
+Knits a file to HTML and makes that HTML available as a SherlockML report
 }
 \details{
-Simply add \code{output: rsherlock::report} to your Rmd yaml.
+Simply add \code{output: rsherlockml::report} to your Rmd yaml.
+
+\code{rmarkdown::html_document}
 }

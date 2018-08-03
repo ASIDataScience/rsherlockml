@@ -1,4 +1,9 @@
-library(testthat)
-library(rsherlock)
+Sys.setenv(RETICULATE_PYTHON = "~/.venv/r-reticulate/bin/python")  # nolint
 
-test_check("rsherlock")
+library(testthat)
+library(assertthat)
+library(mockery)
+library(lubridate)
+library(rsherlockml)
+
+test_check("rsherlockml")

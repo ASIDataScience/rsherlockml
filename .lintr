@@ -1,0 +1,2 @@
+linters: lintr::with_defaults(object_usage_linter = NULL, no_tab_linter = NULL)
+exclusions: list("tests/testthat/test-authentication.R", "tests/testthat/test-datasets.R", "tests/testthat/test-reports.R", "tests/testthat/test-loading.R")
