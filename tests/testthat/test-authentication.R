@@ -43,12 +43,12 @@ test_that(
     test_token <- do.call(paste0, as.list(sample(LETTERS, size = 20)))
 
     mock_post <- mock(NULL)
-    stub(set_hudson_token, "httr::POST", mock_post)
+    mockery::stub(set_hudson_token, "httr::POST", mock_post)
 
     mock_parse_content <- mock(
       list(expires_in = 500, token_type = "Bearer", access_token = test_token)
     )
-    stub(set_hudson_token, "httr::content", mock_parse_content)
+    mockery::stub(set_hudson_token, "httr::content", mock_parse_content)
 
     expect_null(set_hudson_token())
 
@@ -81,12 +81,12 @@ test_that(
     options(list(sherlockml.user_id = NULL))
 
     mock_get <- mock(NULL)
-    stub(set_user_id, "httr::GET", mock_get)
+    mockery::stub(set_user_id, "httr::GET", mock_get)
 
     mock_parse_content <- mock(
       list(account = list(userId = "test-id"))
     )
-    stub(set_user_id, "httr::content", mock_parse_content)
+    mockery::stub(set_user_id, "httr::content", mock_parse_content)
 
     expect_null(set_user_id())
 
@@ -97,7 +97,7 @@ test_that(
 test_that(
   "datasets credentials are retrieved from the right place", {
     httptest::with_mock_api({
-      stub(get_datasets_credentials, "set_hudson_token", mock(NULL))
+      mockery::stub(get_datasets_credentials, "set_hudson_token", mock(NULL))
       httptest::expect_GET(
         get_datasets_credentials(),
         url = paste(getOption("sherlockml.secret_url"),
@@ -110,38 +110,38 @@ test_that(
 
 test_that(
   "auth headers are actual headers", {
-    stub(add_hudson_header, "httr::add_headers", mock("dummy-header"))
+    mockery::stub(add_hudson_header, "httr::add_headers", mock("dummy-header"))
     expect_equal(add_hudson_header(), "dummy-header")
   }
 )
 
 test_that(
   "datasets credentials are retrieved from the right place", {
-    stub(
+    mockery::stub(
       get_datasets_credentials,
       "set_hudson_token",
       mock(NULL, cycle = TRUE)
     )
 
     mock_get <- mock(NULL, cycle = TRUE)
-    stub(get_datasets_credentials, "httr::GET", mock_get)
+    mockery::stub(get_datasets_credentials, "httr::GET", mock_get)
 
     mock_parse_content <- mock(list(verified = FALSE))
-    stub(get_datasets_credentials, "httr::content", mock_parse_content)
+    mockery::stub(get_datasets_credentials, "httr::content", mock_parse_content)
 
     # this is a recursive lad, so we can mock it inside itself
-    stub(
+    mockery::stub(
       get_datasets_credentials,
       "get_datasets_credentials",
       mock(list(verified = TRUE))
     )
     # mock sleeping so we don"t fall asleep ourselves:
-    stub(get_datasets_credentials, "Sys.sleep", mock(NULL))
+    mockery::stub(get_datasets_credentials, "Sys.sleep", mock(NULL))
 
     expect_equal(get_datasets_credentials(), list(verified = TRUE))
 
     mock_parse_content <- mock(list(verified = TRUE))
-    stub(get_datasets_credentials, "httr::content", mock_parse_content)
+    mockery::stub(get_datasets_credentials, "httr::content", mock_parse_content)
     expect_equal(get_datasets_credentials(), list(verified = TRUE))
   }
 )
