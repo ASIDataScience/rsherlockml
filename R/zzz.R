@@ -4,9 +4,8 @@
 #' @importFrom magrittr %>% %$% %T>%
 NULL
 
-# utils::globalVariables(c("pysfs"))
-pysfs <- NULL
-
+# utils::globalVariables(c("pydatasets"))
+pydatasets <- NULL
 
 .onLoad <- function(libname, pkgname) {
   protocol <- Sys.getenv("SHERLOCKML_PROTOCOL")
@@ -17,6 +16,6 @@ pysfs <- NULL
     sherlockml.tavern_url = paste0(protocol, "://tavern.", domain)
   ))
 
-  pysfs <<- reticulate::import("sherlockml.filesystem", delay_load = TRUE)  # nolint
+  pydatasets <<- reticulate::import("sherlockml.datasets", delay_load = TRUE)  # nolint
   NULL
 }

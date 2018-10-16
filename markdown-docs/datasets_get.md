@@ -2,16 +2,13 @@
 
 ## Description
 
-
  Copy from the SherlockML datasets to the local filesystem.
-
 
 ## Usage
 
 ```r
 datasets_get(datasets_path, local_path, project_id = NULL)
 ```
-
 
 ## Arguments
 
@@ -20,4 +17,3 @@ Argument      |Description
 ```datasets_path```     |     File path on SherlockML datasets
 ```local_path```     |     The destination path on the local filesystem.
 ```project_id```     |     The ID of the project; by default, the current project is used.
-

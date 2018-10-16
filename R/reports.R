@@ -68,11 +68,9 @@ report <- function(...) {
   return(format)
 }
 
-
 placeholder_notebook <- system.file(
   "extdata", "empty.ipynb", package = "rsherlockml"
 )
-
 
 extract_report_info <- function(report_object) {
   return(
@@ -90,7 +88,6 @@ extract_report_info <- function(report_object) {
   )
 }
 
-
 # get a list of report IDs
 get_report_list <- function() {
   set_hudson_token()
@@ -104,7 +101,6 @@ get_report_list <- function() {
     purrr::map_df(extract_report_info) %>%
     return()
 }
-
 
 publish_report <- function(report_name, report_path, description) {
 
@@ -126,7 +122,6 @@ publish_report <- function(report_name, report_path, description) {
   }
 }
 
-
 make_tmp_notebook <- function() {
   project_dir <- function() "/project"  # nolint
   tmp_notebook <- paste0(
@@ -135,7 +130,6 @@ make_tmp_notebook <- function() {
   file.copy(from = placeholder_notebook, to = tmp_notebook)
   return(tmp_notebook)
 }
-
 
 publish_new_report <- function(
   report_name,
@@ -169,7 +163,6 @@ publish_new_report <- function(
   update_report_text(report_path, report_object) %>%
     return()
 }
-
 
 publish_new_version <- function(name, report_path) {
 
@@ -207,10 +200,9 @@ publish_new_version <- function(name, report_path) {
     return()
 }
 
-
 wait_and_check <- function(report_object) {
 
-  sfs_credentials <- get_sfs_credentials()
+  datasets_credentials <- get_datasets_credentials()
 
   repeat {
 
@@ -228,8 +220,8 @@ wait_and_check <- function(report_object) {
       aws.s3::head_object(
         object = report_object$active_version$report_key,
         bucket = report_object$active_version$report_bucket,
-        key = sfs_credentials$access_key,
-        secret = sfs_credentials$secret_key,
+        key = datasets_credentials$access_key,
+        secret = datasets_credentials$secret_key,
         region = "eu-west-1", check_region = FALSE
       ) %>% utils::head(1)
       && filtered_reports$status == "success"
@@ -239,10 +231,9 @@ wait_and_check <- function(report_object) {
   }
 }
 
-
 update_report_text <- function(report_path, report_object) {
 
-  sfs_credentials <- get_sfs_credentials()
+  datasets_credentials <- get_datasets_credentials()
 
   file_key <- paste0(
     Sys.getenv("SHERLOCKML_PROJECT_ID"),
@@ -252,10 +243,10 @@ update_report_text <- function(report_path, report_object) {
   # upload to s3
   aws.s3::put_object(
     report_path,
-    object = file_key, bucket = sfs_credentials$bucket,
+    object = file_key, bucket = datasets_credentials$bucket,
     # credentials
-    key = sfs_credentials$access_key,
-    secret = sfs_credentials$secret_key,
+    key = datasets_credentials$access_key,
+    secret = datasets_credentials$secret_key,
     # encryption
     headers = c("x-amz-server-side-encryption" = "AES256"),
     region = "eu-west-1", check_region = FALSE
