@@ -159,7 +159,11 @@ test_that(
 
     expect_args(
       mock_post, 1,
-      'test-protocol://tavern.test-domain/project/',
+      paste(
+        'test-protocol://tavern.test-domain/project',
+        Sys.getenv("SHERLOCKML_PROJECT_ID"),
+        sep="/"
+      ),
       body=list(
         report_name=dummy_report_name,
         notebook_path='test-path.ipynb',
