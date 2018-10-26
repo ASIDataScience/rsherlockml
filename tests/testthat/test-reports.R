@@ -7,9 +7,9 @@ dummy_report_description <- 'Dummy report description.'
 dummy_report_object <- list(active_version=list(report_path='/s3-path'),
                             report_id='dummy-report-id',
                             report_name=dummy_report_name)
-dummy_sfs_credentials <- list(access_key='dummy-key',
-                              secret_key='dummy-secret',
-                              bucket='dummy-bucket')
+dummy_datasets_credentials <- list(access_key='dummy-key',
+                                   secret_key='dummy-secret',
+                                   bucket='dummy-bucket')
 
 inp_file <- file(test_path('fixtures/test_tavern_report_list.json'))
 json_text <- readLines(inp_file)
@@ -23,12 +23,16 @@ test_that(
   "update_report_text makes the correct S3 call",
   {
 
-    stub(update_report_text, 'get_sfs_credentials', dummy_sfs_credentials)
+    mockery::stub(
+      update_report_text,
+      'get_datasets_credentials',
+      dummy_datasets_credentials
+    )
 
-    stub(update_report_text, 'Sys.getenv', 'dummy-project-id')
-    
+    mockery::stub(update_report_text, 'Sys.getenv', 'dummy-project-id')
+
     mock_put_object <- mock(NULL)
-    stub(update_report_text, 'aws.s3::put_object', mock_put_object)
+    mockery::stub(update_report_text, 'aws.s3::put_object', mock_put_object)
 
     expect_null(update_report_text(dummy_report_path, dummy_report_object))
 
@@ -50,14 +54,18 @@ test_that(
   "wait and check make the correct s3 calls",
   {
 
-    stub(wait_and_check, 'Sys.sleep', NULL)
-    stub(wait_and_check, 'get_sfs_credentials', dummy_sfs_credentials)
-    
+    mockery::stub(wait_and_check, 'Sys.sleep', NULL)
+    mockery::stub(
+      wait_and_check,
+      'get_datasets_credentials',
+      dummy_datasets_credentials
+    )
+
     mock_s3_head <- mock(TRUE)
-    
-    stub(wait_and_check, 'aws.s3::head_object', mock_s3_head)
-    
-    stub(
+
+    mockery::stub(wait_and_check, 'aws.s3::head_object', mock_s3_head)
+
+    mockery::stub(
       wait_and_check, 'get_report_list',
       mock(
         tibble::tibble(report_id=c('dummy-report-id'), status=c('success')),
@@ -77,7 +85,7 @@ test_that(
 
     options(list(sherlockml.user_id='jan'))
 
-    stub(
+    mockery::stub(
       publish_new_version, 'get_report_list',
       mock(
         tibble::tibble(report_id=c('dummy-report-id'), status=c('success'),
@@ -86,20 +94,20 @@ test_that(
       )
     )
 
-    stub(publish_new_version, 'make_tmp_notebook', '/project/test-path.ipynb')
-    stub(publish_new_version, 'on.exit', NULL)
-    stub(publish_new_version, 'add_hudson_header', NULL)
+    mockery::stub(publish_new_version, 'make_tmp_notebook', '/project/test-path.ipynb')
+    mockery::stub(publish_new_version, 'on.exit', NULL)
+    mockery::stub(publish_new_version, 'add_hudson_header', NULL)
 
     mock_post <- mock('mock-post-response')
 
-    stub(publish_new_version, 'httr::POST', mock_post)
-    stub(publish_new_version, 'httr::stop_for_status', NULL)
-    stub(publish_new_version, 'httr::content', list(report_id='dummy-report-id'))
+    mockery::stub(publish_new_version, 'httr::POST', mock_post)
+    mockery::stub(publish_new_version, 'httr::stop_for_status', NULL)
+    mockery::stub(publish_new_version, 'httr::content', list(report_id='dummy-report-id'))
 
-    stub(publish_new_version, 'wait_and_check', NULL)
-    
+    mockery::stub(publish_new_version, 'wait_and_check', NULL)
+
     mock_update_text <- mock(NULL)
-    stub(publish_new_version, 'update_report_text', mock_update_text)
+    mockery::stub(publish_new_version, 'update_report_text', mock_update_text)
 
     publish_new_version(dummy_report_name, dummy_report_path)
 
@@ -120,10 +128,10 @@ test_that(
 test_that(
   "publish new report makes a POST request",
   httptest::with_mock_api({
-    
+
     options(list(sherlockml.user_id='jan'))
-    
-    stub(
+
+    mockery::stub(
       publish_new_report, 'get_report_list',
       mock(
         tibble::tibble(report_id=c('dummy-report-id'), status=c('success'),
@@ -131,27 +139,31 @@ test_that(
         cycle=TRUE
       )
     )
-    
-    stub(publish_new_report, 'make_tmp_notebook', '/project/test-path.ipynb')
-    stub(publish_new_report, 'on.exit', NULL)
-    stub(publish_new_report, 'add_hudson_header', NULL)
-    
+
+    mockery::stub(publish_new_report, 'make_tmp_notebook', '/project/test-path.ipynb')
+    mockery::stub(publish_new_report, 'on.exit', NULL)
+    mockery::stub(publish_new_report, 'add_hudson_header', NULL)
+
     mock_post <- mock('mock-post-response')
-    
-    stub(publish_new_report, 'httr::POST', mock_post)
-    stub(publish_new_report, 'httr::stop_for_status', NULL)
-    stub(publish_new_report, 'httr::content', list(report_id='dummy-report-id'))
-    
-    stub(publish_new_report, 'wait_and_check', NULL)
-    
+
+    mockery::stub(publish_new_report, 'httr::POST', mock_post)
+    mockery::stub(publish_new_report, 'httr::stop_for_status', NULL)
+    mockery::stub(publish_new_report, 'httr::content', list(report_id='dummy-report-id'))
+
+    mockery::stub(publish_new_report, 'wait_and_check', NULL)
+
     mock_update_text <- mock(NULL)
-    stub(publish_new_report, 'update_report_text', mock_update_text)
-    
+    mockery::stub(publish_new_report, 'update_report_text', mock_update_text)
+
     publish_new_report(dummy_report_name, dummy_report_path, dummy_report_description)
-    
+
     expect_args(
       mock_post, 1,
-      'test-protocol://tavern.test-domain/project/',
+      paste(
+        'test-protocol://tavern.test-domain/project',
+        Sys.getenv("SHERLOCKML_PROJECT_ID"),
+        sep="/"
+      ),
       body=list(
         report_name=dummy_report_name,
         notebook_path='test-path.ipynb',
@@ -167,13 +179,13 @@ test_that(
 test_that(
   "make_tmp_notebook copies an empty notebook correctly",
   {
-    
-    stub(make_tmp_notebook, 'tempfile', '/tmp/test.ipynb')
+
+    mockery::stub(make_tmp_notebook, 'tempfile', '/tmp/test.ipynb')
 
     nb_path <- make_tmp_notebook()
 
     expect_true(file.exists(nb_path))
-    
+
     file.remove(nb_path)
   }
 )
@@ -181,11 +193,11 @@ test_that(
 test_that(
   "publish_report distinguishes between new report or new version correctly",
   {
-    
-    stub(publish_report, 'set_hudson_token', NULL)
-    stub(publish_report, 'set_user_id', NULL)
 
-    stub(
+    mockery::stub(publish_report, 'set_hudson_token', NULL)
+    mockery::stub(publish_report, 'set_user_id', NULL)
+
+    mockery::stub(
       publish_report,
       'get_report_list',
       mock(
@@ -193,16 +205,16 @@ test_that(
         list(report_name=c('different_dummy_report_name'))
       )
     )
-    
+
     mock_new_version <- mock(NULL)
-    stub(
+    mockery::stub(
       publish_report,
       'publish_new_version',
       mock_new_version
     )
-    
+
     mock_new_report <- mock(NULL)
-    stub(
+    mockery::stub(
       publish_report,
       'publish_new_report',
       mock_new_report
@@ -248,11 +260,11 @@ test_that(
 
 # test_that(
 #   "the report format works", {
-# 
+#
 #     publish_report <- function(...) NULL
-# 
+#
 #     expect_null(rmarkdown::render(dummy_report))
-# 
+#
 #     publish_report <- rsherlockml:::publish_report
 #   }
 # )
@@ -260,16 +272,16 @@ test_that(
 test_that(
   "get_report_list parses tavern responses correctly",
   {
-    stub(get_report_list, 'set_hudson_token', NULL)
-    stub(get_report_list, 'set_user_id', NULL)
+    mockery::stub(get_report_list, 'set_hudson_token', NULL)
+    mockery::stub(get_report_list, 'set_user_id', NULL)
 
-    stub(get_report_list, 'httr::stop_for_status', NULL)
-    stub(get_report_list, 'add_hudson_header', NULL)
+    mockery::stub(get_report_list, 'httr::stop_for_status', NULL)
+    mockery::stub(get_report_list, 'add_hudson_header', NULL)
 
     mock_get <- mock(json_text)
-    stub(get_report_list, 'httr::GET', mock_get)
+    mockery::stub(get_report_list, 'httr::GET', mock_get)
 
-    stub(
+    mockery::stub(
       get_report_list, 'httr::content',
       list(dummy_tavern_response)
     )

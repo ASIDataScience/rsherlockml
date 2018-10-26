@@ -49,13 +49,11 @@ set_user_id <- function() {
   NULL
 }
 
-
 add_hudson_header <- function() {
   httr::add_headers(Authorization = getOption("sherlockml.hudson.token"))
 }
 
-
-get_sfs_credentials <- function() {
+get_datasets_credentials <- function() {
   set_hudson_token()
 
   getOption("sherlockml.secret_url") %>%
@@ -64,12 +62,12 @@ get_sfs_credentials <- function() {
       Authorization = getOption("sherlockml.hudson.token")
     )) %>%
     httr::content(as = "parsed", type = "application/json") ->
-    sfs_credentials
+    datasets_credentials
 
-  if (!is.null(sfs_credentials) && sfs_credentials$verified) {
-      return(sfs_credentials)
+  if (!is.null(datasets_credentials) && datasets_credentials$verified) {
+      return(datasets_credentials)
   } else {
       Sys.sleep(5)
-      return(get_sfs_credentials())
+      return(get_datasets_credentials())
   }
 }

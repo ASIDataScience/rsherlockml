@@ -25,6 +25,7 @@ Imports:
 Suggests:
     testthat,
     mockery,
-    assertthat
+    assertthat,
+    httptest
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1

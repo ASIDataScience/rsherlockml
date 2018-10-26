@@ -5,9 +5,9 @@ test_that(
   {
     mock_getenv <- mock('test-protocol', 'test-domain')
     
-    stub(.onLoad, 'Sys.getenv', mock_getenv)
+    mockery::stub(.onLoad, 'Sys.getenv', mock_getenv)
     # prevent global assignment
-    stub(.onLoad, '<<-', `<-`)
+    mockery::stub(.onLoad, '<<-', `<-`)
     
     expect_null(.onLoad())
     
