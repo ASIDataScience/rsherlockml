@@ -1,5 +1,5 @@
 Package: rsherlockml
-Version: 0.0.0.9000
+Version: 0.0.1
 Title: SherlockML utility functions and extensions
 Description: SherlockML utility functions and extensions.
 Authors@R: c(
