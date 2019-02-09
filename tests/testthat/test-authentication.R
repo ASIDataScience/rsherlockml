@@ -1,19 +1,21 @@
+# Copyright 2018-2019 Faculty Science Limited
+
 context("test-authentication.R")
 
 library(assertthat)
 library(lubridate)
 
-hudson_url <- getOption("sherlockml.hudson_url")
+hudson_url <- getOption("faculty.hudson_url")
 
-Sys.setenv(SHERLOCKML_CLIENT_ID = "test-client-id")
-Sys.setenv(SHERLOCKML_CLIENT_SECRET = "test-client-secret")
+Sys.setenv(FACULTY_CLIENT_ID = "test-client-id")
+Sys.setenv(FACULTY_CLIENT_SECRET = "test-client-secret")
 
 httptest::with_mock_api({
   test_that(
     "the correct hudson endpoint is called with the right payload", {
       options(list(
-        sherlockml.hudson.expiry = NULL,
-        sherlockml.hudson.token = NULL
+        faculty.hudson.expiry = NULL,
+        faculty.hudson.token = NULL
       ))
 
       httptest::expect_POST(
@@ -21,9 +23,9 @@ httptest::with_mock_api({
         url = paste(hudson_url, "access_token", sep = "/"),
         jsonlite::toJSON(list(
           client_id =
-            jsonlite::unbox(Sys.getenv("SHERLOCKML_CLIENT_ID")),
+            jsonlite::unbox(Sys.getenv("FACULTY_CLIENT_ID")),
           client_secret =
-            jsonlite::unbox(Sys.getenv("SHERLOCKML_CLIENT_SECRET")),
+            jsonlite::unbox(Sys.getenv("FACULTY_CLIENT_SECRET")),
           grant_type =
             jsonlite::unbox("client_credentials")
         ))
@@ -35,8 +37,8 @@ httptest::with_mock_api({
 test_that(
   "the hudson credentials are set correctly", {
     options(list(
-      sherlockml.hudson.expiry = NULL,
-      sherlockml.hudson.token = NULL
+      faculty.hudson.expiry = NULL,
+      faculty.hudson.token = NULL
     ))
 
     test_date <- lubridate::now()
@@ -53,12 +55,12 @@ test_that(
     expect_null(set_hudson_token())
 
     expect_true(
-      getOption("sherlockml.hudson.expiry") %within%
+      getOption("faculty.hudson.expiry") %within%
         interval(now() + seconds(490), now() + seconds(510))
     )
 
     expect_equal(
-      getOption("sherlockml.hudson.token"),
+      getOption("faculty.hudson.token"),
       paste("Bearer", test_token)
     )
 
@@ -68,8 +70,8 @@ test_that(
 test_that(
   "the token is not refreshed if it has not expired yet", {
     options(list(
-      sherlockml.hudson.expiry = now() + seconds(500),
-      sherlockml.hudson.token = "test-token"
+      faculty.hudson.expiry = now() + seconds(500),
+      faculty.hudson.token = "test-token"
     ))
 
     expect_null(set_hudson_token())
@@ -78,7 +80,7 @@ test_that(
 
 test_that(
   "the user ID gets set correctly", {
-    options(list(sherlockml.user_id = NULL))
+    options(list(faculty.user_id = NULL))
 
     mock_get <- mock(NULL)
     mockery::stub(set_user_id, "httr::GET", mock_get)
@@ -90,7 +92,7 @@ test_that(
 
     expect_null(set_user_id())
 
-    expect_equal(getOption("sherlockml.user_id"), "test-id")
+    expect_equal(getOption("faculty.user_id"), "test-id")
   }
 )
 
@@ -100,8 +102,8 @@ test_that(
       mockery::stub(get_datasets_credentials, "set_hudson_token", mock(NULL))
       httptest::expect_GET(
         get_datasets_credentials(),
-        url = paste(getOption("sherlockml.secret_url"),
-                    "sfs", Sys.getenv("SHERLOCKML_PROJECT_ID"),
+        url = paste(getOption("faculty.secret_url"),
+                    "sfs", Sys.getenv("FACULTY_PROJECT_ID"),
                     sep = "/")
       )
     })

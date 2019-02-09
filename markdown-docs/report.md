@@ -1,17 +1,14 @@
-# `report`: Rmarkdown format for a SherlockML report
+# `report`: Rmarkdown format for a Faculty report
 
 ## Description
 
-
- Knits a file to HTML and makes that HTML available as a SherlockML report
-
+Knits a file to HTML and makes that HTML available as a Faculty report
 
 ## Usage
 
 ```r
 report(..., quiet = TRUE, mathjax = NULL)
 ```
-
 
 ## Arguments
 
@@ -21,7 +18,4 @@ Argument      |Description
 
 ## Details
 
-
- Simply add `output: rsherlockml::report` to your Rmd yaml.
-
-
+Simply add `output: rfaculty::report` to your Rmd yaml.

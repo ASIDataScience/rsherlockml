@@ -2,15 +2,15 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_etag}
 \alias{datasets_etag}
-\title{Retrieve the etag for a file on SherlockML datasets.}
+\title{Retrieve the etag for a file on Faculty datasets.}
 \usage{
 datasets_etag(path, project_id = NULL)
 }
 \arguments{
-\item{path}{File path on SherlockML datasets}
+\item{path}{File path on Faculty datasets}
 
 \item{project_id}{The ID of the project; by default, the current project is used.}
 }
 \description{
-Retrieve the etag for a file on SherlockML datasets.
+Retrieve the etag for a file on Faculty datasets.
 }

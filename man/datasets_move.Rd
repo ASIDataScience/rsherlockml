@@ -2,17 +2,17 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_move}
 \alias{datasets_move}
-\title{Move a file from one location to another on SherlockML Datasets.}
+\title{Move a file from one location to another on Faculty Datasets.}
 \usage{
 datasets_move(source_path, destination_path, project_id = NULL)
 }
 \arguments{
-\item{source_path}{Source path on SherlockML datasets}
+\item{source_path}{Source path on Faculty datasets}
 
-\item{destination_path}{Destination path on SherlockML datasets}
+\item{destination_path}{Destination path on Faculty datasets}
 
 \item{project_id}{The ID of the project; by default, the current project is used.}
 }
 \description{
-Move a file from one location to another on SherlockML Datasets.
+Move a file from one location to another on Faculty Datasets.
 }

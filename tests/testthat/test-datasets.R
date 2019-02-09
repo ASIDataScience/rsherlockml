@@ -1,3 +1,5 @@
+# Copyright 2018-2019 Faculty Science Limited
+
 context("test-datasets.R")
 
 test_remote_content <- c("/input", "/input/test.file")

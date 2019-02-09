@@ -1,4 +1,4 @@
-# Copyright 2018 ASI Data Science
+# Copyright 2018-2019 Faculty Science Limited
 
 # import pipe operators but not all of magrittr
 #' @importFrom magrittr %>% %$% %T>%
@@ -11,21 +11,21 @@ utils::globalVariables(
 
 set_hudson_token <- function() {
   # check if token is already set
-  if (!("sherlockml.hudson.expiry" %in% names(options()))
-      || (getOption("sherlockml.hudson.expiry") < lubridate::now())) {
+  if (!("faculty.hudson.expiry" %in% names(options()))
+      || (getOption("faculty.hudson.expiry") < lubridate::now())) {
 
-    getOption("sherlockml.hudson_url") %>%
+    getOption("faculty.hudson_url") %>%
       paste("access_token", sep = "/") %>%
       httr::POST(body = list(
-        client_id = Sys.getenv("SHERLOCKML_CLIENT_ID"),
-        client_secret = Sys.getenv("SHERLOCKML_CLIENT_SECRET"),
+        client_id = Sys.getenv("FACULTY_CLIENT_ID"),
+        client_secret = Sys.getenv("FACULTY_CLIENT_SECRET"),
         grant_type = "client_credentials"
       ), encode = "json") %>%
       httr::content(as = "parsed", type = "application/json") %$%
       options(list(
-        sherlockml.hudson.expiry =
+        faculty.hudson.expiry =
           lubridate::now() + lubridate::seconds(expires_in),
-        sherlockml.hudson.token =
+        faculty.hudson.token =
           paste(token_type, access_token)
       ))
 
@@ -35,31 +35,31 @@ set_hudson_token <- function() {
 }
 
 set_user_id <- function() {
-  if (!("sherlockml.user_id" %in% names(options()))) {
+  if (!("faculty.user_id" %in% names(options()))) {
 
-    getOption("sherlockml.hudson_url") %>%
+    getOption("faculty.hudson_url") %>%
       paste("authenticate", sep = "/") %>%
       httr::GET(httr::add_headers(
-        Authorization = getOption("sherlockml.hudson.token")
+        Authorization = getOption("faculty.hudson.token")
       )) %>%
       httr::content(as = "parsed", type = "application/json") %$%
       account %$%
-      options(list(sherlockml.user_id = userId))
+      options(list(faculty.user_id = userId))
   }
   NULL
 }
 
 add_hudson_header <- function() {
-  httr::add_headers(Authorization = getOption("sherlockml.hudson.token"))
+  httr::add_headers(Authorization = getOption("faculty.hudson.token"))
 }
 
 get_datasets_credentials <- function() {
   set_hudson_token()
 
-  getOption("sherlockml.secret_url") %>%
-  paste("sfs", Sys.getenv("SHERLOCKML_PROJECT_ID"), sep = "/") %>%
+  getOption("faculty.secret_url") %>%
+  paste("sfs", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
     httr::GET(httr::add_headers(
-      Authorization = getOption("sherlockml.hudson.token")
+      Authorization = getOption("faculty.hudson.token")
     )) %>%
     httr::content(as = "parsed", type = "application/json") ->
     datasets_credentials

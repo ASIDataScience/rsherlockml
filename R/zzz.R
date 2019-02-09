@@ -1,4 +1,4 @@
-# Copyright 2018 ASI Data Science
+# Copyright 2018-2019 Faculty Science Limited
 
 # import pipe operators but not all of magrittr
 #' @importFrom magrittr %>% %$% %T>%
@@ -8,14 +8,14 @@ NULL
 pydatasets <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  protocol <- Sys.getenv("SHERLOCKML_PROTOCOL")
-  domain <- Sys.getenv("SHERLOCKML_DOMAIN")
+  protocol <- Sys.getenv("FACULTY_PROTOCOL")
+  domain <- Sys.getenv("FACULTY_DOMAIN")
   options(list(
-    sherlockml.hudson_url = paste0(protocol, "://hudson.", domain),
-    sherlockml.secret_url = paste0(protocol, "://secret-service.", domain),
-    sherlockml.tavern_url = paste0(protocol, "://tavern.", domain)
+    faculty.hudson_url = paste0(protocol, "://hudson.", domain),
+    faculty.secret_url = paste0(protocol, "://secret-service.", domain),
+    faculty.tavern_url = paste0(protocol, "://tavern.", domain)
   ))
 
-  pydatasets <<- reticulate::import("sherlockml.datasets", delay_load = TRUE)  # nolint
+  pydatasets <<- reticulate::import("faculty.datasets", delay_load = TRUE)  # nolint
   NULL
 }

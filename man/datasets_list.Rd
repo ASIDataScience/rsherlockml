@@ -2,7 +2,7 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_list}
 \alias{datasets_list}
-\title{List files on SherlockML datasets.}
+\title{List files on Faculty datasets.}
 \usage{
 datasets_list(prefix = "/", project_id = NULL, show_hidden = FALSE)
 }
@@ -14,5 +14,5 @@ datasets_list(prefix = "/", project_id = NULL, show_hidden = FALSE)
 \item{show_hidden}{Whether to show hidden files (files prefixed with a dot).}
 }
 \description{
-List files on SherlockML datasets.
+List files on Faculty datasets.
 }

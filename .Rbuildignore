@@ -1,9 +1,8 @@
-^rsherlock\.Rproj$
-^\.Rproj\.user$
-^LICENSE\.md$
-^data-raw$
 ^\.lintr$
+^\.Rproj\.user$
+^data-raw$
 ^docs$
 ^figure$
+^LICENSE\.md$
 ^markdown-docs$
-^rsherlockml\.Rproj$
+^rfaculty\.Rproj$
