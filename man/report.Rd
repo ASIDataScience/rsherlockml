@@ -2,15 +2,15 @@
 % Please edit documentation in R/reports.R
 \name{report}
 \alias{report}
-\title{Rmarkdown format for a SherlockML report}
+\title{Rmarkdown format for a Faculty report}
 \usage{
 report(...)
 }
 \description{
-Knits a file to HTML and makes that HTML available as a SherlockML report
+Knits a file to HTML and makes that HTML available as a Faculty report
 }
 \details{
-Simply add \code{output: rsherlockml::report} to your Rmd yaml.
+Simply add \code{output: rfaculty::report} to your Rmd yaml.
 
 \code{rmarkdown::html_document}
 }

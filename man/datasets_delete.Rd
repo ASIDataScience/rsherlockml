@@ -2,15 +2,15 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_delete}
 \alias{datasets_delete}
-\title{Delete a file from SherlockML Datasets.}
+\title{Delete a file from Faculty Datasets.}
 \usage{
 datasets_delete(path, project_id = NULL)
 }
 \arguments{
-\item{path}{File path on SherlockML datasets}
+\item{path}{File path on Faculty datasets}
 
 \item{project_id}{The ID of the project; by default, the current project is used.}
 }
 \description{
-Delete a file from SherlockML Datasets.
+Delete a file from Faculty Datasets.
 }

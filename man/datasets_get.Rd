@@ -2,17 +2,17 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_get}
 \alias{datasets_get}
-\title{Copy from the SherlockML datasets to the local filesystem.}
+\title{Copy from the Faculty datasets to the local filesystem.}
 \usage{
 datasets_get(datasets_path, local_path, project_id = NULL)
 }
 \arguments{
-\item{datasets_path}{File path on SherlockML datasets}
+\item{datasets_path}{File path on Faculty datasets}
 
 \item{local_path}{The destination path on the local filesystem.}
 
 \item{project_id}{The ID of the project; by default, the current project is used.}
 }
 \description{
-Copy from the SherlockML datasets to the local filesystem.
+Copy from the Faculty datasets to the local filesystem.
 }

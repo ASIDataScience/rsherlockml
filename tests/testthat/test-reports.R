@@ -1,3 +1,5 @@
+# Copyright 2018-2019 Faculty Science Limited
+
 context("test-reports.R")
 
 dummy_report_path <- '/project/report-path'
@@ -83,7 +85,7 @@ test_that(
   "publish new version makes a POST request",
   httptest::with_mock_api({
 
-    options(list(sherlockml.user_id='jan'))
+    options(list(faculty.user_id='jan'))
 
     mockery::stub(
       publish_new_version, 'get_report_list',
@@ -129,7 +131,7 @@ test_that(
   "publish new report makes a POST request",
   httptest::with_mock_api({
 
-    options(list(sherlockml.user_id='jan'))
+    options(list(faculty.user_id='jan'))
 
     mockery::stub(
       publish_new_report, 'get_report_list',
@@ -161,7 +163,7 @@ test_that(
       mock_post, 1,
       paste(
         'test-protocol://tavern.test-domain/project',
-        Sys.getenv("SHERLOCKML_PROJECT_ID"),
+        Sys.getenv("FACULTY_PROJECT_ID"),
         sep="/"
       ),
       body=list(
@@ -265,7 +267,7 @@ test_that(
 #
 #     expect_null(rmarkdown::render(dummy_report))
 #
-#     publish_report <- rsherlockml:::publish_report
+#     publish_report <- rfaculty:::publish_report
 #   }
 # )
 

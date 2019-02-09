@@ -1,8 +1,8 @@
-# Copyright 2018 ASI Data Science
+# Copyright 2018-2019 Faculty Science Limited
 
-#' Copy from the SherlockML datasets to the local filesystem.
+#' Copy from Faculty datasets to the local filesystem.
 #'
-#' @param datasets_path File path on SherlockML datasets
+#' @param datasets_path File path on Faculty datasets
 #' @param local_path The destination path on the local filesystem.
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
@@ -11,10 +11,10 @@ datasets_get <-
     pydatasets$get(datasets_path, local_path, project_id)
   }
 
-#' Copy from the local filesystem to SherlockML datasets.
+#' Copy from the local filesystem to Faculty datasets.
 #'
 #' @param local_path The destination path on the local filesystem.
-#' @param datasets_path File path on SherlockML datasets
+#' @param datasets_path File path on Faculty datasets
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
 datasets_put <-
@@ -22,7 +22,7 @@ datasets_put <-
     pydatasets$put(local_path, datasets_path, project_id)
   }
 
-#' List files on SherlockML datasets.
+#' List files on Faculty datasets.
 #'
 #' @param prefix The prefix by which to filter files (default: '/')
 #' @param project_id The ID of the project; by default, the current project is used.
@@ -35,10 +35,10 @@ datasets_list <-
     pydatasets$ls(prefix, project_id, show_hidden)
   }
 
-#' Copy a file from one location to another on SherlockML Datasets.
+#' Copy a file from one location to another on Faculty Datasets.
 #'
-#' @param source_path Source path on SherlockML datasets
-#' @param destination_path Destination path on SherlockML datasets
+#' @param source_path Source path on Faculty datasets
+#' @param destination_path Destination path on Faculty datasets
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
 datasets_copy <-
@@ -48,10 +48,10 @@ datasets_copy <-
     pydatasets$cp(source_path, destination_path, project_id)
   }
 
-#' Move a file from one location to another on SherlockML Datasets.
+#' Move a file from one location to another on Faculty Datasets.
 #'
-#' @param source_path Source path on SherlockML datasets
-#' @param destination_path Destination path on SherlockML datasets
+#' @param source_path Source path on Faculty datasets
+#' @param destination_path Destination path on Faculty datasets
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
 datasets_move <-
@@ -61,18 +61,18 @@ datasets_move <-
     pydatasets$mv(source_path, destination_path, project_id)
   }
 
-#' Delete a file from SherlockML Datasets.
+#' Delete a file from Faculty Datasets.
 #'
-#' @param path File path on SherlockML datasets
+#' @param path File path on Faculty datasets
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
 datasets_delete <- function(path, project_id = NULL) {
   pydatasets$rm(path, project_id)
 }
 
-#' Retrieve the etag for a file on SherlockML datasets.
+#' Retrieve the etag for a file on Faculty datasets.
 #'
-#' @param path File path on SherlockML datasets
+#' @param path File path on Faculty datasets
 #' @param project_id The ID of the project; by default, the current project is used.
 #' @export
 datasets_etag <- function(path, project_id = NULL) {

@@ -1,4 +1,4 @@
-# Copyright 2018 ASI Data Science
+# Copyright 2018-2019 Faculty Science Limited
 
 # import pipe operators but not all of magrittr
 #' @importFrom magrittr %>% %$% %T>% %<>%
@@ -7,11 +7,11 @@ NULL
 # the following silences non-standard eval issues w/ CMD CHECK
 utils::globalVariables(c("report_id", "report_name", "."))
 
-#' Rmarkdown format for a SherlockML report
+#' Rmarkdown format for a Faculty report
 #'
-#' Knits a file to HTML and makes that HTML available as a SherlockML report
+#' Knits a file to HTML and makes that HTML available as a Faculty report
 #'
-#' Simply add \code{output: rsherlockml::report} to your Rmd yaml.
+#' Simply add \code{output: rfaculty::report} to your Rmd yaml.
 #'
 #' \code{rmarkdown::html_document}
 #'
@@ -69,7 +69,7 @@ report <- function(...) {
 }
 
 placeholder_notebook <- system.file(
-  "extdata", "empty.ipynb", package = "rsherlockml"
+  "extdata", "empty.ipynb", package = "rfaculty"
 )
 
 extract_report_info <- function(report_object) {
@@ -93,8 +93,8 @@ get_report_list <- function() {
   set_hudson_token()
   set_user_id()
 
-  getOption("sherlockml.tavern_url") %>%
-    paste("project", Sys.getenv("SHERLOCKML_PROJECT_ID"), sep = "/") %>%
+  getOption("faculty.tavern_url") %>%
+    paste("project", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
     httr::GET(add_hudson_header()) %T>%
     httr::stop_for_status() %>%
     httr::content(as = "parsed", type = "application/json") %>%
@@ -144,12 +144,12 @@ publish_new_report <- function(
     report_name = report_name,
     notebook_path = substring(tmp_notebook, 10),
     description = description,
-    author_id = getOption("sherlockml.user_id")
+    author_id = getOption("faculty.user_id")
   )
   print(body)
 
-  getOption("sherlockml.tavern_url") %>%
-    paste("project", Sys.getenv("SHERLOCKML_PROJECT_ID"), sep = "/") %>%
+  getOption("faculty.tavern_url") %>%
+    paste("project", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
     httr::POST(
       body = body,
       add_hudson_header(),
@@ -178,11 +178,11 @@ publish_new_version <- function(name, report_path) {
   on.exit(suppressWarnings(file.remove(tmp_notebook)))
 
   version_object <-
-    getOption("sherlockml.tavern_url") %>%
+    getOption("faculty.tavern_url") %>%
     paste("report", report_id, "version", sep = "/") %>%
     httr::POST(
       body = list(notebook_path = substring(tmp_notebook, 10),
-                  author_id = getOption("sherlockml.user_id"),
+                  author_id = getOption("faculty.user_id"),
                   draft = FALSE),
       add_hudson_header(),
       encode = "json"
@@ -236,7 +236,7 @@ update_report_text <- function(report_path, report_object) {
   datasets_credentials <- get_datasets_credentials()
 
   file_key <- paste0(
-    Sys.getenv("SHERLOCKML_PROJECT_ID"),
+    Sys.getenv("FACULTY_PROJECT_ID"),
     report_object$active_version$report_path
   )
 

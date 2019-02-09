@@ -1,18 +1,17 @@
-Package: rsherlockml
+Package: rfaculty
 Version: 0.0.1
-Title: SherlockML utility functions and extensions
-Description: SherlockML utility functions and extensions.
+Title: Faculty Platform utility functions and extensions
+Description: Faculty Platform utility functions and extensions.
 Authors@R: c(
-  person("Jan", "Freyberg", email = "jan.f@asidatascience.com", role = c("aut", "cre")),
-  person("ASI Data Science", email = "opensource@asidatascience.com", role = c("cph", "fnd"))
+  person("Faculty Science Limited", email = "opensource@faculty.ai", role = c("aut", "cph", "cre", "fnd"))
   )
-URL: https://github.com/ASIDataScience/rsherlockml
-BugReports: https://github.com/ASIDataScience/rsherlockml/issues
+URL: https://github.com/facultyai/rfaculty
+BugReports: https://github.com/facultyai/rfaculty/issues
 License:	Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-Imports: 
+Imports:
     httr,
     aws.s3,
     magrittr,

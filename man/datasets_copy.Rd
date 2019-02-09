@@ -2,17 +2,17 @@
 % Please edit documentation in R/datasets.R
 \name{datasets_copy}
 \alias{datasets_copy}
-\title{Copy a file from one location to another on SherlockML Datasets.}
+\title{Copy a file from one location to another on Faculty Datasets.}
 \usage{
 datasets_copy(source_path, destination_path, project_id = NULL)
 }
 \arguments{
-\item{source_path}{Source path on SherlockML datasets}
+\item{source_path}{Source path on Faculty datasets}
 
-\item{destination_path}{Destination path on SherlockML datasets}
+\item{destination_path}{Destination path on Faculty datasets}
 
 \item{project_id}{The ID of the project; by default, the current project is used.}
 }
 \description{
-Copy a file from one location to another on SherlockML Datasets.
+Copy a file from one location to another on Faculty Datasets.
 }
