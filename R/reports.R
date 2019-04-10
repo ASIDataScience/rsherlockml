@@ -222,7 +222,8 @@ wait_and_check <- function(report_object) {
         bucket = report_object$active_version$report_bucket,
         key = datasets_credentials$access_key,
         secret = datasets_credentials$secret_key,
-        region = datasets_credentials$region
+        region = datasets_credentials$region,
+        check_region = FALSE
       ) %>% utils::head(1)
       && filtered_reports$status == "success"
     ) {
@@ -247,6 +248,7 @@ update_report_text <- function(report_path, report_object) {
     # credentials
     key = datasets_credentials$access_key,
     secret = datasets_credentials$secret_key,
-    region = datasets_credentials$region
+    region = datasets_credentials$region,
+    check_region = FALSE
   )
 }

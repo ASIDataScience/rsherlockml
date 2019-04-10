@@ -46,7 +46,8 @@ test_that(
       bucket='dummy-bucket',
       key='dummy-key',
       secret='dummy-secret',
-      region='dummy-region'
+      region='dummy-region',
+      check_region=FALSE
     )
   }
 )
