@@ -11,7 +11,8 @@ dummy_report_object <- list(active_version=list(report_path='/s3-path'),
                             report_name=dummy_report_name)
 dummy_datasets_credentials <- list(access_key='dummy-key',
                                    secret_key='dummy-secret',
-                                   bucket='dummy-bucket')
+                                   bucket='dummy-bucket',
+                                   region='dummy-region')
 
 inp_file <- file(test_path('fixtures/test_tavern_report_list.json'))
 json_text <- readLines(inp_file)
@@ -45,8 +46,7 @@ test_that(
       bucket='dummy-bucket',
       key='dummy-key',
       secret='dummy-secret',
-      headers=c("x-amz-server-side-encryption" = "AES256"),
-      region='eu-west-1',
+      region='dummy-region',
       check_region=FALSE
     )
   }
