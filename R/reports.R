@@ -222,7 +222,7 @@ wait_and_check <- function(report_object) {
         bucket = report_object$active_version$report_bucket,
         key = datasets_credentials$access_key,
         secret = datasets_credentials$secret_key,
-        region = "eu-west-1", check_region = FALSE
+        region = datasets_credentials$region
       ) %>% utils::head(1)
       && filtered_reports$status == "success"
     ) {
@@ -247,8 +247,6 @@ update_report_text <- function(report_path, report_object) {
     # credentials
     key = datasets_credentials$access_key,
     secret = datasets_credentials$secret_key,
-    # encryption
-    headers = c("x-amz-server-side-encryption" = "AES256"),
-    region = "eu-west-1", check_region = FALSE
+    region = datasets_credentials$region
   )
 }
