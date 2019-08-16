@@ -217,9 +217,9 @@ wait_and_check <- function(report_object) {
     Sys.sleep(4)
 
     remote_report_path <- report_object$active_version$report_path
-    path_exists <- length(datasets_glob(remote_report_path, prefix = remote_report_path)%>% utils::head(1)) == 1
+    num_paths_matched <- length(datasets_list(remote_report_path, show_hidden = TRUE)%>% utils::head(1))
 
-    if (path_exists && filtered_reports$status == "success") {
+    if (num_paths_matched > 0 && filtered_reports$status == "success") {
       break
     }
   }
