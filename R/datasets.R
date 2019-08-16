@@ -35,20 +35,6 @@ datasets_list <-
     pydatasets$ls(prefix, project_id, show_hidden)
   }
 
-#' List files on Faculty datasets.
-#'
-#' @param prefix The prefix by which to filter files (default: '/')
-#' @param project_id The ID of the project; by default, the current project is used.
-#' @param show_hidden Whether to show hidden files (files prefixed with a dot).
-#' @export
-datasets_glob <-
-  function(pattern,
-           prefix = "/",
-           project_id = NULL,
-           show_hidden = FALSE) {
-    pydatasets$glob(pattern, prefix, project_id, show_hidden)
-  }
-
 #' Copy a file from one location to another on Faculty Datasets.
 #'
 #' @param source_path Source path on Faculty datasets
