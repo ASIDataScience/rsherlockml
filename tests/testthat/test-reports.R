@@ -6,7 +6,8 @@ dummy_report_path <- '/project/report-path'
 dummy_report_name <- 'dummy-report-name'
 dummy_report_description <- 'Dummy report description.'
 
-dummy_report_object <- list(active_version=list(report_path='/s3-path'),
+dummy_remote_report_path <- '/s3-path'
+dummy_report_object <- list(active_version=list(report_path=dummy_remote_report_path),
                             report_id='dummy-report-id',
                             report_name=dummy_report_name)
 dummy_datasets_credentials <- list(access_key='dummy-key',
@@ -23,36 +24,6 @@ dummy_tavern_response <- jsonlite::fromJSON(json_text)
 dummy_report <- test_path("fixtures/test_report.Rmd")
 
 test_that(
-  "update_report_text makes the correct S3 call",
-  {
-
-    mockery::stub(
-      update_report_text,
-      'get_datasets_credentials',
-      dummy_datasets_credentials
-    )
-
-    mockery::stub(update_report_text, 'Sys.getenv', 'dummy-project-id')
-
-    mock_put_object <- mock(NULL)
-    mockery::stub(update_report_text, 'aws.s3::put_object', mock_put_object)
-
-    expect_null(update_report_text(dummy_report_path, dummy_report_object))
-
-    expect_args(
-      mock_put_object, 1,
-      dummy_report_path,
-      object='dummy-project-id/s3-path',
-      bucket='dummy-bucket',
-      key='dummy-key',
-      secret='dummy-secret',
-      region='dummy-region',
-      check_region=FALSE
-    )
-  }
-)
-
-test_that(
   "wait and check make the correct s3 calls",
   {
 
@@ -65,7 +36,7 @@ test_that(
 
     mock_s3_head <- mock(TRUE)
 
-    mockery::stub(wait_and_check, 'aws.s3::head_object', mock_s3_head)
+    mockery::stub(wait_and_check, 'datasets_list', list(dummy_remote_report_path))
 
     mockery::stub(
       wait_and_check, 'get_report_list',
@@ -108,8 +79,8 @@ test_that(
 
     mockery::stub(publish_new_version, 'wait_and_check', NULL)
 
-    mock_update_text <- mock(NULL)
-    mockery::stub(publish_new_version, 'update_report_text', mock_update_text)
+    mock_datasets_put <- mock(NULL)
+    mockery::stub(publish_new_version, 'datasets_put', mock_datasets_put)
 
     publish_new_version(dummy_report_name, dummy_report_path)
 
@@ -154,8 +125,8 @@ test_that(
 
     mockery::stub(publish_new_report, 'wait_and_check', NULL)
 
-    mock_update_text <- mock(NULL)
-    mockery::stub(publish_new_report, 'update_report_text', mock_update_text)
+    mock_datasets_put <- mock(NULL)
+    mockery::stub(publish_new_report, 'datasets_put', mock_datasets_put)
 
     publish_new_report(dummy_report_name, dummy_report_path, dummy_report_description)
 

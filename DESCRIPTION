@@ -13,7 +13,6 @@ LazyData: true
 ByteCompile: true
 Imports:
     httr,
-    aws.s3,
     magrittr,
     stringr,
     dplyr,
