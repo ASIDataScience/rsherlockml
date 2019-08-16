@@ -217,9 +217,13 @@ wait_and_check <- function(report_object) {
     Sys.sleep(4)
 
     remote_report_path <- report_object$active_version$report_path
-    num_paths_matched <- length(datasets_list(remote_report_path, show_hidden = TRUE)%>% utils::head(1))
+    paths_matched <- datasets_list(remote_report_path, show_hidden = TRUE)
 
-    if (num_paths_matched > 0 && filtered_reports$status == "success") {
+    if (
+      length(paths_matched) > 0
+      && is.element(remote_report_path, paths_matched)
+      && filtered_reports$status == "success"
+    ) {
       break
     }
   }
