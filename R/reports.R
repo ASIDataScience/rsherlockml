@@ -160,7 +160,7 @@ publish_new_report <- function(
   report_object
 
   wait_and_check(report_object)
-  update_report_text(report_path, report_object) %>%
+  datasets_put(report_path, report_object$active_version$report_path) %>%
     return()
 }
 
@@ -196,7 +196,7 @@ publish_new_version <- function(name, report_path) {
   wait_and_check(report_object)
 
   # update the HTML
-  update_report_text(report_path, report_object) %>%
+  datasets_put(report_path, report_object$active_version$report_path) %>%
     return()
 }
 
@@ -216,39 +216,15 @@ wait_and_check <- function(report_object) {
 
     Sys.sleep(4)
 
+    remote_report_path <- report_object$active_version$report_path
+    paths_matched <- datasets_list(remote_report_path, show_hidden = TRUE)
+
     if (
-      aws.s3::head_object(
-        object = report_object$active_version$report_key,
-        bucket = report_object$active_version$report_bucket,
-        key = datasets_credentials$access_key,
-        secret = datasets_credentials$secret_key,
-        region = datasets_credentials$region,
-        check_region = FALSE
-      ) %>% utils::head(1)
+      length(paths_matched) > 0
+      && is.element(remote_report_path, paths_matched)
       && filtered_reports$status == "success"
     ) {
       break
     }
   }
-}
-
-update_report_text <- function(report_path, report_object) {
-
-  datasets_credentials <- get_datasets_credentials()
-
-  file_key <- paste0(
-    Sys.getenv("FACULTY_PROJECT_ID"),
-    report_object$active_version$report_path
-  )
-
-  # upload to s3
-  aws.s3::put_object(
-    report_path,
-    object = file_key, bucket = datasets_credentials$bucket,
-    # credentials
-    key = datasets_credentials$access_key,
-    secret = datasets_credentials$secret_key,
-    region = datasets_credentials$region,
-    check_region = FALSE
-  )
 }
