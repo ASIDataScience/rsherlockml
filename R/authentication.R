@@ -57,7 +57,7 @@ get_datasets_credentials <- function() {
   set_hudson_token()
 
   getOption("faculty.secret_url") %>%
-  paste("sfs", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
+  paste("hoard", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
     httr::GET(httr::add_headers(
       Authorization = getOption("faculty.hudson.token")
     )) %>%
