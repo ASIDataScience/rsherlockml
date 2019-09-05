@@ -202,8 +202,6 @@ publish_new_version <- function(name, report_path) {
 
 wait_and_check <- function(report_object) {
 
-  datasets_credentials <- get_datasets_credentials()
-
   repeat {
 
     filtered_reports <-
