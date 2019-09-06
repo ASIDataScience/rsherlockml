@@ -28,11 +28,6 @@ test_that(
   {
 
     mockery::stub(wait_and_check, 'Sys.sleep', NULL)
-    mockery::stub(
-      wait_and_check,
-      'get_datasets_credentials',
-      dummy_datasets_credentials
-    )
 
     mock_s3_head <- mock(TRUE)
 

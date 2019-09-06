@@ -52,22 +52,3 @@ set_user_id <- function() {
 add_hudson_header <- function() {
   httr::add_headers(Authorization = getOption("faculty.hudson.token"))
 }
-
-get_datasets_credentials <- function() {
-  set_hudson_token()
-
-  getOption("faculty.secret_url") %>%
-  paste("hoard", Sys.getenv("FACULTY_PROJECT_ID"), sep = "/") %>%
-    httr::GET(httr::add_headers(
-      Authorization = getOption("faculty.hudson.token")
-    )) %>%
-    httr::content(as = "parsed", type = "application/json") ->
-    datasets_credentials
-
-  if (!is.null(datasets_credentials) && datasets_credentials$verified) {
-      return(datasets_credentials)
-  } else {
-      Sys.sleep(5)
-      return(get_datasets_credentials())
-  }
-}
