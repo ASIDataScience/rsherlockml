@@ -24,18 +24,8 @@ dummy_tavern_response <- jsonlite::fromJSON(json_text)
 dummy_report <- test_path("fixtures/test_report.Rmd")
 
 test_that(
-  "wait and check make the correct s3 calls",
+  "wait and check makes the correct calls",
   {
-
-    mockery::stub(wait_and_check, 'Sys.sleep', NULL)
-    mockery::stub(
-      wait_and_check,
-      'get_datasets_credentials',
-      dummy_datasets_credentials
-    )
-
-    mock_s3_head <- mock(TRUE)
-
     mockery::stub(wait_and_check, 'datasets_list', list(dummy_remote_report_path))
 
     mockery::stub(
