@@ -82,7 +82,7 @@ extract_report_info <- function(report_object) {
       magrittr::extract(
         report_object$active_version,
         c("version_id", "report_path", "author_id",
-          "notebook_path", "created_at", "status")
+          "notebook_path", "status")
       )
     )
   )
